@@ -1,0 +1,7 @@
+.idea/*
+disconf/*
+*.iml
+*.cache
+*.cache.lock
+*/*/target/*
+*/target/*

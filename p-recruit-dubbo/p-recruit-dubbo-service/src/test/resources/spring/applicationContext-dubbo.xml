@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:monitor protocol="registry"/>
+
+    <!-- dubbo服务暴露端口 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.port}"/>
+
+    <!-- 声明需要暴露的服务接口 -->
+    <dubbo:service interface="com.chinaredstar.recruit.api.service.OperationLogService" ref="operationLogService"
+                   timeout="3000" retries="0"/>
+</beans>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chinaredstar.recruit.mapper.OperationLogMapper" >
+  <resultMap id="BaseResultMap" type="com.chinaredstar.recruit.api.model.OperationLog" >
+    <id column="Id" property="id" jdbcType="INTEGER" />
+    <result column="EmployeeId" property="employeeid" jdbcType="VARCHAR" />
+    <result column="SNumber" property="snumber" jdbcType="VARCHAR" />
+    <result column="ResumeId" property="resumeid" jdbcType="VARCHAR" />
+    <result column="Type" property="type" jdbcType="INTEGER" />
+    <result column="ResultMessage" property="resultmessage" jdbcType="VARCHAR" />
+    <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
+    <result column="Source" property="source" jdbcType="INTEGER" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.chinaredstar.recruit.api.model.OperationLog" extends="BaseResultMap" >
+    <result column="Content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    Id, EmployeeId, SNumber, ResumeId, Type, ResultMessage, CreateTime, Source
+  </sql>
+  <sql id="Blob_Column_List" >
+    Content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from operation_log
+    where Id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from operation_log
+    where Id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.chinaredstar.recruit.api.model.OperationLog" >
+    insert into operation_log (Id, EmployeeId, SNumber, 
+      ResumeId, Type, ResultMessage, 
+      CreateTime, Source, Content
+      )
+    values (#{id,jdbcType=INTEGER}, #{employeeid,jdbcType=VARCHAR}, #{snumber,jdbcType=VARCHAR}, 
+      #{resumeid,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{resultmessage,jdbcType=VARCHAR}, 
+      #{createtime,jdbcType=TIMESTAMP}, #{source,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.chinaredstar.recruit.api.model.OperationLog" >
+    insert into operation_log
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        Id,
+      </if>
+      <if test="employeeid != null" >
+        EmployeeId,
+      </if>
+      <if test="snumber != null" >
+        SNumber,
+      </if>
+      <if test="resumeid != null" >
+        ResumeId,
+      </if>
+      <if test="type != null" >
+        Type,
+      </if>
+      <if test="resultmessage != null" >
+        ResultMessage,
+      </if>
+      <if test="createtime != null" >
+        CreateTime,
+      </if>
+      <if test="source != null" >
+        Source,
+      </if>
+      <if test="content != null" >
+        Content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="employeeid != null" >
+        #{employeeid,jdbcType=VARCHAR},
+      </if>
+      <if test="snumber != null" >
+        #{snumber,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeid != null" >
+        #{resumeid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="resultmessage != null" >
+        #{resultmessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chinaredstar.recruit.api.model.OperationLog" >
+    update operation_log
+    <set >
+      <if test="employeeid != null" >
+        EmployeeId = #{employeeid,jdbcType=VARCHAR},
+      </if>
+      <if test="snumber != null" >
+        SNumber = #{snumber,jdbcType=VARCHAR},
+      </if>
+      <if test="resumeid != null" >
+        ResumeId = #{resumeid,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        Type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="resultmessage != null" >
+        ResultMessage = #{resultmessage,jdbcType=VARCHAR},
+      </if>
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        Source = #{source,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        Content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.chinaredstar.recruit.api.model.OperationLog" >
+    update operation_log
+    set EmployeeId = #{employeeid,jdbcType=VARCHAR},
+      SNumber = #{snumber,jdbcType=VARCHAR},
+      ResumeId = #{resumeid,jdbcType=VARCHAR},
+      Type = #{type,jdbcType=INTEGER},
+      ResultMessage = #{resultmessage,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      Source = #{source,jdbcType=INTEGER},
+      Content = #{content,jdbcType=LONGVARCHAR}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chinaredstar.recruit.api.model.OperationLog" >
+    update operation_log
+    set EmployeeId = #{employeeid,jdbcType=VARCHAR},
+      SNumber = #{snumber,jdbcType=VARCHAR},
+      ResumeId = #{resumeid,jdbcType=VARCHAR},
+      Type = #{type,jdbcType=INTEGER},
+      ResultMessage = #{resultmessage,jdbcType=VARCHAR},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
+      Source = #{source,jdbcType=INTEGER}
+    where Id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
