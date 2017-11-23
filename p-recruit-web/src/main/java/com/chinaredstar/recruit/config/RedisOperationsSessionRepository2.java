@@ -72,9 +72,11 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
      */
     private String keyPrefix = DEFAULT_SPRING_SESSION_REDIS_PREFIX;
     private ApplicationEventPublisher eventPublisher = new ApplicationEventPublisher() {
+        @Override
         public void publishEvent(ApplicationEvent event) {
         }
 
+        @Override
         public void publishEvent(Object event) {
         }
     };
@@ -173,6 +175,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         this.redisFlushMode = redisFlushMode;
     }
 
+    @Override
     public void save(RedisSession session) {
         session.saveDelta();
         if (session.isNew()) {
@@ -187,10 +190,12 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         this.expirationPolicy.cleanExpiredSessions();
     }
 
+    @Override
     public RedisSession getSession(String id) {
         return getSession(id, false);
     }
 
+    @Override
     public Map<String, RedisSession> findByIndexNameAndIndexValue(String indexName, String indexValue) {
         if (!PRINCIPAL_NAME_INDEX_NAME.equals(indexName)) {
             return Collections.emptyMap();
@@ -243,6 +248,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         return loaded;
     }
 
+    @Override
     public void delete(String sessionId) {
         RedisSession session = getSession(sessionId, true);
         if (session == null) {
@@ -259,6 +265,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         save(session);
     }
 
+    @Override
     public RedisSession createSession() {
         RedisSession redisSession = new RedisSession();
         if (defaultMaxInactiveInterval != null) {
@@ -267,6 +274,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         return redisSession;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void onMessage(Message message, byte[] pattern) {
         byte[] messageChannel = message.getChannel();
@@ -469,6 +477,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
             this.originalPrincipalName = PRINCIPAL_NAME_RESOLVER.resolvePrincipal(this);
         }
 
+        @Override
         public boolean isExpired() {
             return cached.isExpired();
         }
@@ -481,43 +490,52 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
             this.isNew = isNew;
         }
 
+        @Override
         public long getCreationTime() {
             return cached.getCreationTime();
         }
 
+        @Override
         public String getId() {
             return cached.getId();
         }
 
+        @Override
         public long getLastAccessedTime() {
             return cached.getLastAccessedTime();
         }
 
+        @Override
         public void setLastAccessedTime(long lastAccessedTime) {
             cached.setLastAccessedTime(lastAccessedTime);
             delta.put(LAST_ACCESSED_ATTR, getLastAccessedTime());
             flushImmediateIfNecessary();
         }
 
+        @Override
         public int getMaxInactiveIntervalInSeconds() {
             return cached.getMaxInactiveIntervalInSeconds();
         }
 
+        @Override
         public void setMaxInactiveIntervalInSeconds(int interval) {
             cached.setMaxInactiveIntervalInSeconds(interval);
             delta.put(MAX_INACTIVE_ATTR, getMaxInactiveIntervalInSeconds());
             flushImmediateIfNecessary();
         }
 
+        @Override
         @SuppressWarnings("unchecked")
         public Object getAttribute(String attributeName) {
             return cached.getAttribute(attributeName);
         }
 
+        @Override
         public Set<String> getAttributeNames() {
             return cached.getAttributeNames();
         }
 
+        @Override
         public void setAttribute(String attributeName, Object attributeValue) {
             if (isBaseDataType(attributeValue)) {
                 cached.setAttribute(attributeName, attributeValue);
@@ -551,6 +569,7 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
                             attributeValue instanceof DateTime;
         }
 
+        @Override
         public void removeAttribute(String attributeName) {
             cached.removeAttribute(attributeName);
             delta.put(getSessionAttrNameKey(attributeName), null);

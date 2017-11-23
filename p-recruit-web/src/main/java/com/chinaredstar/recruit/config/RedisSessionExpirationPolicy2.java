@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 final class RedisSessionExpirationPolicy2 {
 
     private static final Log logger = LogFactory.getLog(RedisSessionExpirationPolicy2.class);
-    private static final String expiresSessionKey = "UC-MaxInactiveIntervalInSeconds";
+    private static final String EXPIRES_SESSION_KEY = "UC-MaxInactiveIntervalInSeconds";
 
     private final RedisOperations<Object, Object> redis;
 
@@ -34,7 +34,7 @@ final class RedisSessionExpirationPolicy2 {
     }
 
     static long expiresInMillis(ExpiringSession session) {
-        Integer maxInactiveInSeconds = session.getAttribute(expiresSessionKey);
+        Integer maxInactiveInSeconds = session.getAttribute(EXPIRES_SESSION_KEY);
         if (maxInactiveInSeconds == null) {
             maxInactiveInSeconds = session.getMaxInactiveIntervalInSeconds();
         }
@@ -85,7 +85,7 @@ final class RedisSessionExpirationPolicy2 {
         BoundSetOperations<Object, Object> expireOperations = redis.boundSetOps(expireKey);
         expireOperations.add(keyToExpire);
 
-        Integer sessionExpireInSeconds = session.getAttribute(expiresSessionKey);
+        Integer sessionExpireInSeconds = session.getAttribute(EXPIRES_SESSION_KEY);
         if (sessionExpireInSeconds == null) {
             sessionExpireInSeconds = session.getMaxInactiveIntervalInSeconds();
         }

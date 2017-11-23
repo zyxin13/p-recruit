@@ -128,6 +128,7 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
         this.redisNamespace = namespace;
     }
 
+    @Override
     public void setImportMetadata(AnnotationMetadata importMetadata) {
 
         Map<String, Object> enableAttrMap = importMetadata.getAnnotationAttributes(EnableRedisHttpSession.class.getName());
@@ -187,6 +188,7 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
             this.configure = configure;
         }
 
+        @Override
         public void afterPropertiesSet() throws Exception {
             RedisConnection connection = connectionFactory.getConnection();
             configure.configure(connection);
