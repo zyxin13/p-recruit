@@ -6,17 +6,22 @@ import java.io.Serializable;
 /**
  * @author yuxin.zou
  */
-public class ServiceResult<T> implements Serializable{
+public class ServiceResult<T> implements Serializable {
     private static final long serialVersionUID = 1112149670302251011L;
 
-    /** 是否成功获取数据 */
-
+    /**
+     * 是否成功获取数据
+     */
     private boolean success;
 
-    /** 具体详细msg */
+    /**
+     * 具体详细msg
+     */
     private String message;
 
-    /** 服务端返回数据 */
+    /**
+     * 服务端返回数据
+     */
     private T data;
 
     public boolean isSuccess() {

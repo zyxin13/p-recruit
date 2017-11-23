@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 @ApiModel("操作日志")
-public class OperationLog implements Serializable{
+public class OperationLog implements Serializable {
     private static final long serialVersionUID = -3761183626162646124L;
 
     @ApiModelProperty("主键，自增长")

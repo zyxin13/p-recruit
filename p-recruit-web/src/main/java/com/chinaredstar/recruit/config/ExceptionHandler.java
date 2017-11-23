@@ -1,7 +1,6 @@
 package com.chinaredstar.recruit.config;
 
 import com.chinaredstar.recruit.common.ResultCode;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -10,18 +9,17 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author:杨果
  * @date:15/12/22 上午10:18
  * <p/>
  * Description:
- *
+ * <p>
  * 异常统一拦截处理
  */
 @Configuration

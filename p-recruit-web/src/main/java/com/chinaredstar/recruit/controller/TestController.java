@@ -2,7 +2,9 @@ package com.chinaredstar.recruit.controller;
 
 import com.chinaredstar.recruit.api.common.ServiceResult;
 import com.chinaredstar.recruit.api.service.OperationLogService;
+import com.chinaredstar.recruit.api.service.PushDataLogService;
 import com.chinaredstar.recruit.api.vo.OperationLogVo;
+import com.chinaredstar.recruit.api.vo.PushDataLogVo;
 import com.chinaredstar.recruit.common.Result;
 import com.chinaredstar.recruit.common.ResultCode;
 import com.chinaredstar.recruit.utils.ResultUtil;
@@ -26,6 +28,9 @@ public class TestController {
 
     @Autowired
     private OperationLogService operationLogService;
+
+    @Autowired
+    private PushDataLogService pushDataLogService;
 
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "请求成功"),
@@ -52,6 +57,34 @@ public class TestController {
         } catch (Exception e) {
             LOGGER.error("根据id{id}获取操作日志信息异常", id, e);
             return ResultUtil.error(ResultCode.C500, "根据id获取操作日志信息异常");
+        }
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "请求成功"),
+            @ApiResponse(code = 401, message = "未授权"),
+            @ApiResponse(code = 403, message = "禁止访问"),
+            @ApiResponse(code = 404, message = "返回数据为空"),
+            @ApiResponse(code = 415, message = "请求参数错误"),
+            @ApiResponse(code = 422, message = "校验错误"),
+            @ApiResponse(code = 500, message = "服务器错误")
+    })
+    @ApiOperation(value = "getPushDataLogById", notes = "根据id获取推送数据日志信息")
+    @RequestMapping(value = "/pushDataLog/{id}", method = RequestMethod.GET)
+    public Result<PushDataLogVo> getPushDataLogById(@ApiParam("推送数据日志id") @PathVariable("id") Integer id) {
+        if (id == null) {
+            return ResultUtil.error(ResultCode.C415, "推送数据日志ID不能为空");
+        }
+        try {
+            ServiceResult<PushDataLogVo> serviceResult = pushDataLogService.selectByPrimaryKey(id);
+            if (serviceResult.isSuccess()) {
+                return ResultUtil.success(serviceResult.getData());
+            } else {
+                return ResultUtil.error(ResultCode.C500, serviceResult.getMessage());
+            }
+        } catch (Exception e) {
+            LOGGER.error("根据id{id}获取推送数据日志信息异常", id, e);
+            return ResultUtil.error(ResultCode.C500, "根据id获取推送数据日志信息异常");
         }
     }
 

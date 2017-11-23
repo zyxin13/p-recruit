@@ -12,6 +12,7 @@ public class ServiceResultUtil implements Serializable {
 
     /**
      * 没有返回数据的成功结果
+     *
      * @return
      */
     public static ServiceResult success() {
@@ -22,6 +23,7 @@ public class ServiceResultUtil implements Serializable {
 
     /**
      * 返回数据的成功结果
+     *
      * @return
      */
     public static <T> ServiceResult<T> success(T data) {
@@ -33,6 +35,7 @@ public class ServiceResultUtil implements Serializable {
 
     /**
      * 返回消息的失败结果
+     *
      * @return
      */
     public static ServiceResult error(String message) {
@@ -44,6 +47,7 @@ public class ServiceResultUtil implements Serializable {
 
     /**
      * 返回默认消息的失败结果
+     *
      * @return
      */
     public static ServiceResult error() {

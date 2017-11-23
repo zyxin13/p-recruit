@@ -1,4 +1,4 @@
-package com.chinaredstar.recruit.api.vo;
+package com.chinaredstar.recruit.api.model;
 
 import com.wordnik.swagger.annotations.ApiModel;
 import com.wordnik.swagger.annotations.ApiModelProperty;
@@ -6,21 +6,15 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * Created by yuxin.zou on 2017/11/22.
- */
-@ApiModel("操作日志")
-public class OperationLogVo implements Serializable {
-    private static final long serialVersionUID = -395124514971165195L;
+@ApiModel("推送数据日志")
+public class PushDataLog implements Serializable {
+    private static final long serialVersionUID = -8502732150469949686L;
 
     @ApiModelProperty("主键，自增长")
     private Integer id;
 
     @ApiModelProperty("")
     private String employeeid;
-
-    @ApiModelProperty("")
-    private String snumber;
 
     @ApiModelProperty("")
     private String resumeid;
@@ -33,9 +27,6 @@ public class OperationLogVo implements Serializable {
 
     @ApiModelProperty("")
     private Date createtime;
-
-    @ApiModelProperty("")
-    private Integer source;
 
     @ApiModelProperty("")
     private String content;
@@ -54,14 +45,6 @@ public class OperationLogVo implements Serializable {
 
     public void setEmployeeid(String employeeid) {
         this.employeeid = employeeid == null ? null : employeeid.trim();
-    }
-
-    public String getSnumber() {
-        return snumber;
-    }
-
-    public void setSnumber(String snumber) {
-        this.snumber = snumber == null ? null : snumber.trim();
     }
 
     public String getResumeid() {
@@ -94,14 +77,6 @@ public class OperationLogVo implements Serializable {
 
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
-    }
-
-    public Integer getSource() {
-        return source;
-    }
-
-    public void setSource(Integer source) {
-        this.source = source;
     }
 
     public String getContent() {

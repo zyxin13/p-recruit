@@ -17,14 +17,14 @@ import javax.servlet.Filter;
 @EnableWebMvc
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
-    }
-
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
     }
 
     @Bean
@@ -45,6 +45,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public StandardServletMultipartResolver getStandardServletMultipartResolver() {
         return new StandardServletMultipartResolver();
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/img/**").addResourceLocations("classpath:/static/img/");

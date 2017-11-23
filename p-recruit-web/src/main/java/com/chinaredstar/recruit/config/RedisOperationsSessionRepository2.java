@@ -30,63 +30,47 @@ import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author:杨果
  * @date:16/9/1 下午3:42
- *
+ * <p>
  * Description:
- *
  */
 public class RedisOperationsSessionRepository2 implements FindByIndexNameSessionRepository<RedisOperationsSessionRepository2.RedisSession>, MessageListener {
-    private static final Log logger = LogFactory.getLog(RedisOperationsSessionRepository2.class);
-
-    private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
-
-    static PrincipalNameResolver PRINCIPAL_NAME_RESOLVER = new PrincipalNameResolver();
-
     /**
      * The default prefix for each key and channel in Redis used by Spring Session
      */
     static final String DEFAULT_SPRING_SESSION_REDIS_PREFIX = "spring:session:";
-
     /**
      * The key in the Hash representing {@link org.springframework.session.ExpiringSession#getCreationTime()}
      */
     static final String CREATION_TIME_ATTR = "creationTime";
-
     /**
      * The key in the Hash representing {@link org.springframework.session.ExpiringSession#getMaxInactiveIntervalInSeconds()}
      */
     static final String MAX_INACTIVE_ATTR = "maxInactiveInterval";
-
     /**
      * The key in the Hash representing {@link org.springframework.session.ExpiringSession#getLastAccessedTime()}
      */
     static final String LAST_ACCESSED_ATTR = "lastAccessedTime";
-
     /**
      * The prefix of the key for used for session attributes. The suffix is the name of the session
      * attribute. For example, if the session contained an attribute named attributeName, then there
      * would be an entry in the hash named sessionAttr:attributeName that mapped to its value.
      */
     static final String SESSION_ATTR_PREFIX = "sessionAttr:";
-
+    private static final Log logger = LogFactory.getLog(RedisOperationsSessionRepository2.class);
+    private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
+    static PrincipalNameResolver PRINCIPAL_NAME_RESOLVER = new PrincipalNameResolver();
+    private final RedisOperations<Object, Object> sessionRedisOperations;
+    private final RedisSessionExpirationPolicy2 expirationPolicy;
     /**
      * The prefix for every key used by Spring Session in Redis.
      */
     private String keyPrefix = DEFAULT_SPRING_SESSION_REDIS_PREFIX;
-
-    private final RedisOperations<Object, Object> sessionRedisOperations;
-
-    private final RedisSessionExpirationPolicy2 expirationPolicy;
-
     private ApplicationEventPublisher eventPublisher = new ApplicationEventPublisher() {
         public void publishEvent(ApplicationEvent event) {
         }
@@ -125,6 +109,23 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         Assert.notNull(sessionRedisOperations, "sessionRedisOperations cannot be null");
         this.sessionRedisOperations = sessionRedisOperations;
         this.expirationPolicy = new RedisSessionExpirationPolicy2(sessionRedisOperations, this);
+    }
+
+    /**
+     * Gets the key for the specified session attribute
+     */
+    static String getSessionAttrNameKey(String attributeName) {
+        return SESSION_ATTR_PREFIX + attributeName;
+    }
+
+    private static RedisTemplate<Object, Object> createDefaultTemplate(RedisConnectionFactory connectionFactory) {
+        Assert.notNull(connectionFactory, "connectionFactory cannot be null");
+        RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setConnectionFactory(connectionFactory);
+        template.afterPropertiesSet();
+        return template;
     }
 
     /**
@@ -409,21 +410,22 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
         return this.sessionRedisOperations.boundHashOps(key);
     }
 
-    /**
-     * Gets the key for the specified session attribute
-     */
-    static String getSessionAttrNameKey(String attributeName) {
-        return SESSION_ATTR_PREFIX + attributeName;
-    }
+    static class PrincipalNameResolver {
+        private SpelExpressionParser parser = new SpelExpressionParser();
 
-    private static RedisTemplate<Object, Object> createDefaultTemplate(RedisConnectionFactory connectionFactory) {
-        Assert.notNull(connectionFactory, "connectionFactory cannot be null");
-        RedisTemplate<Object, Object> template = new RedisTemplate<Object, Object>();
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setConnectionFactory(connectionFactory);
-        template.afterPropertiesSet();
-        return template;
+        public String resolvePrincipal(Session session) {
+            String principalName = session.getAttribute(PRINCIPAL_NAME_INDEX_NAME);
+            if (principalName != null) {
+                return principalName;
+            }
+            Object authentication = session.getAttribute(SPRING_SECURITY_CONTEXT);
+            if (authentication != null) {
+                Expression expression = parser.parseExpression("authentication?.name");
+                return expression.getValue(authentication, String.class);
+            }
+            return null;
+        }
+
     }
 
     /**
@@ -467,22 +469,16 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
             this.originalPrincipalName = PRINCIPAL_NAME_RESOLVER.resolvePrincipal(this);
         }
 
-        public void setNew(boolean isNew) {
-            this.isNew = isNew;
-        }
-
-        public void setLastAccessedTime(long lastAccessedTime) {
-            cached.setLastAccessedTime(lastAccessedTime);
-            delta.put(LAST_ACCESSED_ATTR, getLastAccessedTime());
-            flushImmediateIfNecessary();
-        }
-
         public boolean isExpired() {
             return cached.isExpired();
         }
 
         public boolean isNew() {
             return isNew;
+        }
+
+        public void setNew(boolean isNew) {
+            this.isNew = isNew;
         }
 
         public long getCreationTime() {
@@ -497,14 +493,20 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
             return cached.getLastAccessedTime();
         }
 
-        public void setMaxInactiveIntervalInSeconds(int interval) {
-            cached.setMaxInactiveIntervalInSeconds(interval);
-            delta.put(MAX_INACTIVE_ATTR, getMaxInactiveIntervalInSeconds());
+        public void setLastAccessedTime(long lastAccessedTime) {
+            cached.setLastAccessedTime(lastAccessedTime);
+            delta.put(LAST_ACCESSED_ATTR, getLastAccessedTime());
             flushImmediateIfNecessary();
         }
 
         public int getMaxInactiveIntervalInSeconds() {
             return cached.getMaxInactiveIntervalInSeconds();
+        }
+
+        public void setMaxInactiveIntervalInSeconds(int interval) {
+            cached.setMaxInactiveIntervalInSeconds(interval);
+            delta.put(MAX_INACTIVE_ATTR, getMaxInactiveIntervalInSeconds());
+            flushImmediateIfNecessary();
         }
 
         @SuppressWarnings("unchecked")
@@ -587,23 +589,5 @@ public class RedisOperationsSessionRepository2 implements FindByIndexNameSession
             Long originalExpiration = originalLastAccessTime == null ? null : originalLastAccessTime + TimeUnit.SECONDS.toMillis(getMaxInactiveIntervalInSeconds());
             expirationPolicy.onExpirationUpdated(originalExpiration, this);
         }
-    }
-
-    static class PrincipalNameResolver {
-        private SpelExpressionParser parser = new SpelExpressionParser();
-
-        public String resolvePrincipal(Session session) {
-            String principalName = session.getAttribute(PRINCIPAL_NAME_INDEX_NAME);
-            if (principalName != null) {
-                return principalName;
-            }
-            Object authentication = session.getAttribute(SPRING_SECURITY_CONTEXT);
-            if (authentication != null) {
-                Expression expression = parser.parseExpression("authentication?.name");
-                return expression.getValue(authentication, String.class);
-            }
-            return null;
-        }
-
     }
 }

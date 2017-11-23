@@ -8,9 +8,10 @@
        http://www.ryantenney.com/schema/metrics http://www.ryantenney.com/schema/metrics/metrics-3.1.xsd">
 
     <!-- 激活利用注解进行装配 -->
-    <context:annotation-config />
+    <context:annotation-config/>
 
-    <bean id="graphitePropertyPlaceholderConfigurer" class="com.chinaredstar.perseus.monitor.GraphitePropertyPlaceholderConfigurer" init-method="setProperties">
+    <bean id="graphitePropertyPlaceholderConfigurer"
+          class="com.chinaredstar.perseus.monitor.GraphitePropertyPlaceholderConfigurer" init-method="setProperties">
         <property name="order" value="1"/>
         <property name="ignoreUnresolvablePlaceholders" value="true"/>
     </bean>

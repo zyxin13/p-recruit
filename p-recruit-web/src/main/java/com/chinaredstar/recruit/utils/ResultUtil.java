@@ -8,11 +8,12 @@ import java.io.Serializable;
 /**
  * Created by yuxin.zou on 2017/11/22.
  */
-public class ResultUtil implements Serializable{
+public class ResultUtil implements Serializable {
     private static final long serialVersionUID = 3262813962838556084L;
 
     /**
      * 没有返回数据的成功结果
+     *
      * @return
      */
     public static Result success() {
@@ -23,6 +24,7 @@ public class ResultUtil implements Serializable{
 
     /**
      * 返回数据的成功结果
+     *
      * @return
      */
     public static <T> Result<T> success(T value) {
@@ -34,6 +36,7 @@ public class ResultUtil implements Serializable{
 
     /**
      * 返回错误码和消息的失败结果
+     *
      * @return
      */
     public static Result error(ResultCode errorCode, String message) {
@@ -45,6 +48,7 @@ public class ResultUtil implements Serializable{
 
     /**
      * 返回错误码和默认对应消息的失败结果
+     *
      * @return
      */
     public static Result error(ResultCode errorCode) {
@@ -56,9 +60,10 @@ public class ResultUtil implements Serializable{
 
     /**
      * 返回500错误码和消息的失败结果
+     *
      * @return
      */
-    public static Result error( String message) {
+    public static Result error(String message) {
         Result result = new Result();
         result.setMessage(message);
         result.setCode(ResultCode.C500.getCode());
@@ -67,6 +72,7 @@ public class ResultUtil implements Serializable{
 
     /**
      * 返回500错误码和默认消息的失败结果
+     *
      * @return
      */
     public static Result error() {

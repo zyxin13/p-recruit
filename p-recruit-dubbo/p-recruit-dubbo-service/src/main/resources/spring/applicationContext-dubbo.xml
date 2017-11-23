@@ -14,4 +14,7 @@
     <!-- 声明需要暴露的服务接口 -->
     <dubbo:service interface="com.chinaredstar.recruit.api.service.OperationLogService" ref="operationLogService"
                    timeout="3000"/>
+
+    <dubbo:service interface="com.chinaredstar.recruit.api.service.PushDataLogService" ref="pushDataLogService"
+                   timeout="3000"/>
 </beans>

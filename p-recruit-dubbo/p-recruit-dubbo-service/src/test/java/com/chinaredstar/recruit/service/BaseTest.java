@@ -10,7 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class BaseTest {
 
     @Test
-    public void initTest(){
+    public void initTest() {
         System.out.println("init ...... ");
     }
 

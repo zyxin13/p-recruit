@@ -3,30 +3,24 @@ package com.chinaredstar.recruit.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.session.Session;
-import org.springframework.session.web.http.CookieHttpSessionStrategy;
-import org.springframework.session.web.http.DefaultCookieSerializer;
-import org.springframework.session.web.http.HeaderHttpSessionStrategy;
-import org.springframework.session.web.http.HttpSessionManager;
-import org.springframework.session.web.http.HttpSessionStrategy;
-import org.springframework.session.web.http.MultiHttpSessionStrategy;
-
-import java.util.Map;
+import org.springframework.session.web.http.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 /**
  * @author:杨果
  * @date:16/8/26 下午2:26
- *
+ * <p>
  * Description:
- *
+ * <p>
  * session id cookie和header都返回
  */
 @Configuration
 public class CustomHttpSessionStrategy implements HttpSessionStrategy, MultiHttpSessionStrategy, HttpSessionManager {
-    private HeaderHttpSessionStrategy headerHttpSessionStrategy = new HeaderHttpSessionStrategy();
     public CookieHttpSessionStrategy cookieHttpSessionStrategy = new CookieHttpSessionStrategy();
+    private HeaderHttpSessionStrategy headerHttpSessionStrategy = new HeaderHttpSessionStrategy();
 
     @Override
     public String getRequestedSessionId(HttpServletRequest request) {

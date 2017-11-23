@@ -112,10 +112,6 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
         this.maxInactiveIntervalInSeconds = maxInactiveIntervalInSeconds;
     }
 
-    public void setRedisNamespace(String namespace) {
-        this.redisNamespace = namespace;
-    }
-
     public void setRedisFlushMode(RedisFlushMode redisFlushMode) {
         Assert.notNull(redisFlushMode, "redisFlushMode cannot be null");
         this.redisFlushMode = redisFlushMode;
@@ -126,6 +122,10 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
             return this.redisNamespace;
         }
         return System.getProperty("spring.session.redis.namespace", "");
+    }
+
+    public void setRedisNamespace(String namespace) {
+        this.redisNamespace = namespace;
     }
 
     public void setImportMetadata(AnnotationMetadata importMetadata) {
@@ -140,28 +140,6 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
     @Bean
     public InitializingBean enableRedisKeyspaceNotificationsInitializer(@Qualifier("sessionJedisConnectionFactory") RedisConnectionFactory connectionFactory) {
         return new EnableRedisKeyspaceNotificationsInitializer(connectionFactory, configureRedisAction);
-    }
-
-    /**
-     * Ensures that Redis is configured to send keyspace notifications. This is important to ensure
-     * that expiration and deletion of sessions trigger SessionDestroyedEvents. Without the
-     * SessionDestroyedEvent resources may not get cleaned up properly. For example, the mapping of
-     * the Session to WebSocket connections may not get cleaned up.
-     */
-    static class EnableRedisKeyspaceNotificationsInitializer implements InitializingBean {
-        private final RedisConnectionFactory connectionFactory;
-
-        private ConfigureRedisAction configure;
-
-        EnableRedisKeyspaceNotificationsInitializer(RedisConnectionFactory connectionFactory, ConfigureRedisAction configure) {
-            this.connectionFactory = connectionFactory;
-            this.configure = configure;
-        }
-
-        public void afterPropertiesSet() throws Exception {
-            RedisConnection connection = connectionFactory.getConnection();
-            configure.configure(connection);
-        }
     }
 
     /**
@@ -191,6 +169,28 @@ public class RedisHttpSessionConfiguration2 extends SpringHttpSessionConfigurati
     @Qualifier("springSessionRedisSubscriptionExecutor")
     public void setRedisSubscriptionExecutor(Executor redisSubscriptionExecutor) {
         this.redisSubscriptionExecutor = redisSubscriptionExecutor;
+    }
+
+    /**
+     * Ensures that Redis is configured to send keyspace notifications. This is important to ensure
+     * that expiration and deletion of sessions trigger SessionDestroyedEvents. Without the
+     * SessionDestroyedEvent resources may not get cleaned up properly. For example, the mapping of
+     * the Session to WebSocket connections may not get cleaned up.
+     */
+    static class EnableRedisKeyspaceNotificationsInitializer implements InitializingBean {
+        private final RedisConnectionFactory connectionFactory;
+
+        private ConfigureRedisAction configure;
+
+        EnableRedisKeyspaceNotificationsInitializer(RedisConnectionFactory connectionFactory, ConfigureRedisAction configure) {
+            this.connectionFactory = connectionFactory;
+            this.configure = configure;
+        }
+
+        public void afterPropertiesSet() throws Exception {
+            RedisConnection connection = connectionFactory.getConnection();
+            configure.configure(connection);
+        }
     }
 }
 

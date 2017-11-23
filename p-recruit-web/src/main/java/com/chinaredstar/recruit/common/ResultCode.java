@@ -16,13 +16,12 @@ public enum ResultCode {
     C422(422, "校验错误"),
     C500(500, "服务器错误");
 
+    private int code;//code
+    private String desc;//description
     ResultCode(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
-
-    private int code;//code
-    private String desc;//description
 
     public int getCode() {
         return code;

@@ -13,4 +13,8 @@
     <!-- 操作日志接口 -->
     <dubbo:reference id="operationLogService" interface="com.chinaredstar.recruit.api.service.OperationLogService"
                      timeout="3000"/>
+
+    <!-- 推送数据日志接口 -->
+    <dubbo:reference id="pushDataLogService" interface="com.chinaredstar.recruit.api.service.PushDataLogService"
+                     timeout="3000"/>
 </beans>

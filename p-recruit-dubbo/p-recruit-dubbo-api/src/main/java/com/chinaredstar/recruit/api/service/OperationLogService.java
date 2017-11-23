@@ -1,7 +1,6 @@
 package com.chinaredstar.recruit.api.service;
 
 import com.chinaredstar.recruit.api.common.ServiceResult;
-import com.chinaredstar.recruit.api.model.OperationLog;
 import com.chinaredstar.recruit.api.vo.OperationLogVo;
 
 /**

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>p-recruit-dubbo</artifactId>
         <groupId>com.chinaredstar</groupId>
@@ -67,7 +68,8 @@
                 <env>prd</env>
                 <jvmSettings.initialMemorySize>512</jvmSettings.initialMemorySize>
                 <jvmSettings.maxMemorySize>512</jvmSettings.maxMemorySize>
-                <jvmSettings.javaagent>-javaagent:/data/app/pinpoint-agent-1.5.2/100/pinpoint-bootstrap-1.5.2.jar</jvmSettings.javaagent>
+                <jvmSettings.javaagent>-javaagent:/data/app/pinpoint-agent-1.5.2/100/pinpoint-bootstrap-1.5.2.jar
+                </jvmSettings.javaagent>
             </properties>
         </profile>
     </profiles>
@@ -254,7 +256,8 @@
                                     <extraArgument>-server</extraArgument>
                                     <extraArgument>${jvmSettings.javaagent}</extraArgument>
                                     <extraArgument>-Dpinpoint.agentId=${jvmSettings.agentId}</extraArgument>
-                                    <extraArgument>-Dpinpoint.applicationName=${jvmSettings.agentApplicationName}</extraArgument>
+                                    <extraArgument>-Dpinpoint.applicationName=${jvmSettings.agentApplicationName}
+                                    </extraArgument>
                                 </extraArguments>
                             </jvmSettings>
                         </daemon>

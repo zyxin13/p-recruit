@@ -2,11 +2,8 @@ package com.chinaredstar.recruit.config;
 
 import com.mangofactory.swagger.configuration.SpringSwaggerConfig;
 import com.mangofactory.swagger.models.dto.ApiInfo;
-import com.mangofactory.swagger.paths.RelativeSwaggerPathProvider;
-import com.mangofactory.swagger.paths.SwaggerPathProvider;
 import com.mangofactory.swagger.plugin.EnableSwagger;
 import com.mangofactory.swagger.plugin.SwaggerSpringMvcPlugin;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.endpoint.mvc.EndpointHandlerMapping;
 import org.springframework.context.annotation.Bean;
@@ -16,7 +13,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author:杨果
@@ -37,7 +33,7 @@ public class SwaggerConfig {
     @Autowired
     public void setSpringSwaggerConfig(SpringSwaggerConfig springSwaggerConfig) {
         // 不显示Endpoint Mapping
-        List<RequestMappingHandlerMapping> mappings =  springSwaggerConfig.swaggerRequestMappingHandlerMappings();
+        List<RequestMappingHandlerMapping> mappings = springSwaggerConfig.swaggerRequestMappingHandlerMappings();
         Iterator<RequestMappingHandlerMapping> iterator = mappings.iterator();
         while (iterator.hasNext()) {
             if (iterator.next() instanceof EndpointHandlerMapping) {
