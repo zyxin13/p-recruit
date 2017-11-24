@@ -5,7 +5,6 @@ import com.chinaredstar.recruit.api.model.OperationLog;
 import com.chinaredstar.recruit.api.service.OperationLogService;
 import com.chinaredstar.recruit.api.vo.OperationLogVo;
 import com.chinaredstar.recruit.mapper.OperationLogMapper;
-import com.chinaredstar.recruit.utils.ServiceResultUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -25,21 +24,21 @@ public class OperationLogServiceImpl implements OperationLogService {
     @Override
     public ServiceResult<Boolean> deleteByPrimaryKey(Integer id) {
         if (id == null) {
-            return ServiceResultUtil.error("id不能为空");
+            return ServiceResult.error("id不能为空");
         }
         try {
             operationLogMapper.deleteByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("根据id删除操作日志失败{}", e);
-            return ServiceResultUtil.error("根据id删除操作日志失败");
+            return ServiceResult.error("根据id删除操作日志失败");
         }
-        return ServiceResultUtil.success(true);
+        return ServiceResult.success(true);
     }
 
     @Override
     public ServiceResult<Boolean> insertSelective(OperationLogVo record) {
         if (record == null) {
-            return ServiceResultUtil.error("插入对象不能为空");
+            return ServiceResult.error("插入对象不能为空");
         }
         try {
             OperationLog operationLog = new OperationLog();
@@ -47,38 +46,38 @@ public class OperationLogServiceImpl implements OperationLogService {
             operationLogMapper.insertSelective(operationLog);
         } catch (Exception e) {
             LOGGER.error("添加操作日志失败{}", e);
-            return ServiceResultUtil.error("添加操作日志失败");
+            return ServiceResult.error("添加操作日志失败");
         }
-        return ServiceResultUtil.success(true);
+        return ServiceResult.success(true);
     }
 
     @Override
     public ServiceResult<OperationLogVo> selectByPrimaryKey(Integer id) {
         if (id == null) {
-            return ServiceResultUtil.error("id不能为空");
+            return ServiceResult.error("id不能为空");
         }
         OperationLog operationLog;
         try {
             operationLog = operationLogMapper.selectByPrimaryKey(id);
         } catch (Exception e) {
             LOGGER.error("查询操作日志失败{}", e);
-            return ServiceResultUtil.error("查询操作日志失败");
+            return ServiceResult.error("查询操作日志失败");
         }
         if (operationLog == null) {
-            return ServiceResultUtil.success(null);
+            return ServiceResult.success(null);
         }
         OperationLogVo operationLogVo = new OperationLogVo();
         BeanUtils.copyProperties(operationLog, operationLogVo);
-        return ServiceResultUtil.success(operationLogVo);
+        return ServiceResult.success(operationLogVo);
     }
 
     @Override
     public ServiceResult<Boolean> updateByPrimaryKeySelective(OperationLogVo record) {
         if (record == null) {
-            return ServiceResultUtil.error("更新对象不能为空");
+            return ServiceResult.error("更新对象不能为空");
         }
         if (record.getId() == null) {
-            return ServiceResultUtil.error("id不能为空");
+            return ServiceResult.error("id不能为空");
         }
         try {
             OperationLog operationLog = new OperationLog();
@@ -86,8 +85,8 @@ public class OperationLogServiceImpl implements OperationLogService {
             operationLogMapper.updateByPrimaryKeySelective(operationLog);
         } catch (Exception e) {
             LOGGER.error("更新操作日志失败{}{}", record.getId(), e);
-            return ServiceResultUtil.error("更新操作日志失败");
+            return ServiceResult.error("更新操作日志失败");
         }
-        return ServiceResultUtil.success(true);
+        return ServiceResult.success(true);
     }
 }

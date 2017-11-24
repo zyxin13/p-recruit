@@ -12,49 +12,79 @@ public class ServiceResult<T> implements Serializable {
     /**
      * 是否成功获取数据
      */
-    private boolean success;
+    private final Boolean success;
 
     /**
      * 具体详细msg
      */
-    private String message;
+    private final String message;
 
     /**
      * 服务端返回数据
      */
-    private T data;
+    private final T data;
+
+    private ServiceResult(Boolean success, String message, T data) {
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
+
+    /**
+     * 没有返回数据的成功结果
+     *
+     * @return
+     */
+    public static ServiceResult success() {
+        return new ServiceResult(true, null, null);
+    }
+
+    /**
+     * 返回数据的成功结果
+     *
+     * @return
+     */
+    public static <T> ServiceResult<T> success(T data) {
+        return new ServiceResult<>(true, null, data);
+    }
+
+    /**
+     * 返回消息的失败结果
+     *
+     * @return
+     */
+    public static ServiceResult error(String message) {
+        return new ServiceResult(false, message, null);
+    }
+
+    /**
+     * 返回默认消息的失败结果
+     *
+     * @return
+     */
+    public static ServiceResult error() {
+        return new ServiceResult(false, "error", null);
+    }
 
     public boolean isSuccess() {
         return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public T getData() {
         return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("ServiceResult [")
-                .append("isSuccess=").append(isSuccess())
-                .append(",msg=").append(getMessage())
-                .append(",data=").append(getData())
+                .append("success=").append(this.success)
+                .append(",message=").append(this.message)
+                .append(",data=").append(this.data)
                 .append("]");
         return builder.toString();
     }
