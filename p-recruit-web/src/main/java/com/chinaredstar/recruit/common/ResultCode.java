@@ -37,18 +37,18 @@ public enum ResultCode {
     /**
      * 状态码
      */
-    private int code;
+    private Integer code;
     /**
      * 描述
      */
     private String desc;
 
-    ResultCode(int code, String desc) {
+    ResultCode(Integer code, String desc) {
         this.code = code;
         this.desc = desc;
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

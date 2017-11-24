@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = -4696898674758059398L;
     @ApiModelProperty(value = "结果代码")
-    private final int code;
+    private final Integer code;
     @ApiModelProperty(value = "错误消息，返回失败情况下填充")
     private final String message;
     @ApiModelProperty(value = "结果对象")
@@ -32,8 +32,8 @@ public class Result<T> implements Serializable {
      *
      * @return
      */
-    public static Result success() {
-        return new Result(ResultCode.C200.getCode(), null, null);
+    public static <T> Result<T> success() {
+        return new Result<>(ResultCode.C200.getCode(), null, null);
     }
 
     /**
@@ -50,8 +50,8 @@ public class Result<T> implements Serializable {
      *
      * @return
      */
-    public static Result error(ResultCode errorCode, String message) {
-        return new Result(errorCode.getCode(), message, null);
+    public static <T> Result<T> error(ResultCode errorCode, String message) {
+        return new Result<>(errorCode.getCode(), message, null);
     }
 
     /**
@@ -59,8 +59,8 @@ public class Result<T> implements Serializable {
      *
      * @return
      */
-    public static Result error(ResultCode errorCode) {
-        return new Result(errorCode.getCode(), errorCode.getDesc(), null);
+    public static <T> Result<T> error(ResultCode errorCode) {
+        return new Result<>(errorCode.getCode(), errorCode.getDesc(), null);
     }
 
     /**
@@ -68,8 +68,8 @@ public class Result<T> implements Serializable {
      *
      * @return
      */
-    public static Result error(String message) {
-        return new Result(ResultCode.C500.getCode(), message, null);
+    public static <T> Result<T> error(String message) {
+        return new Result<>(ResultCode.C500.getCode(), message, null);
     }
 
     /**
@@ -77,11 +77,11 @@ public class Result<T> implements Serializable {
      *
      * @return
      */
-    public static Result error() {
-        return new Result(ResultCode.C500.getCode(), ResultCode.C500.getDesc(), null);
+    public static <T> Result<T> error() {
+        return new Result<>(ResultCode.C500.getCode(), ResultCode.C500.getDesc(), null);
     }
 
-    public int getCode() {
+    public Integer getCode() {
         return code;
     }
 

@@ -35,8 +35,8 @@ public class ServiceResult<T> implements Serializable {
      *
      * @return
      */
-    public static ServiceResult success() {
-        return new ServiceResult(true, null, null);
+    public static <T> ServiceResult<T> success() {
+        return new ServiceResult<>(true, null, null);
     }
 
     /**
@@ -53,8 +53,8 @@ public class ServiceResult<T> implements Serializable {
      *
      * @return
      */
-    public static ServiceResult error(String message) {
-        return new ServiceResult(false, message, null);
+    public static <T> ServiceResult<T> error(String message) {
+        return new ServiceResult<>(false, message, null);
     }
 
     /**
@@ -62,8 +62,8 @@ public class ServiceResult<T> implements Serializable {
      *
      * @return
      */
-    public static ServiceResult error() {
-        return new ServiceResult(false, "error", null);
+    public static <T> ServiceResult<T> error() {
+        return new ServiceResult<>(false, "error", null);
     }
 
     public boolean isSuccess() {
